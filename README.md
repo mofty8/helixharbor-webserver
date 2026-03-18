@@ -17,9 +17,3 @@ Local runtime artifacts, generated reports, notebook checkpoints, virtual enviro
 - `backgrounds_tsv/`: background datasets used by the app
 - `tests/`: regression tests
 - `Dockerfile`: container build definition
-
-## TMbed note
-
-Do not commit local TMbed model weights or the vendored `tmbed/.git` directory to this repository.
-
-If TMbed is required for deployment, document its installation or container build separately rather than storing large model files in GitHub.
