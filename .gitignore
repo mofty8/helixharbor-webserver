@@ -16,6 +16,7 @@ UCS/*.csv
 
 tmbed/.git/
 tmbed/.DS_Store
+tmbed/sample.pred
 tmbed/data/
 tmbed/examples/
 tmbed/tmbed/models/
