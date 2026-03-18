@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SignalSurf</title>
+<style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      
+      /* Rotating wheel container */
+      #loading-wheel {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #4CAF50;
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+        display: none; /* Hide the loading wheel initially */
+      }
+
+      /* Rotating wheel animation */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      /* Style the header */
+      .header {
+        display: flex;
+        
+        align-items: center;
+        padding: 20px;
+        background-color: #3f9a42;
+        color: #fff;
+      }
+
+      .header h1 {
+        margin: 0;
+      }
+
+     /* Style the question mark button */
+      .info-icon {
+        background-color: #f6faf6;
+        color: #3f9a42;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-left: 10px;
+        padding: 5px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      /* Style the tooltip text */
+      .tooltip-text {
+        display: none;
+        background-color: #333;
+        color: white;
+        border-radius: 5px;
+        padding: 10px;
+        position: absolute;
+        left: 30px; /* Position the tooltip away from the edge of the window */
+        top: calc(50% - 20px); /* Center the tooltip vertically with respect to the info icon */
+        white-space: nowrap;
+        z-index: 10;
+        margin-left: 10px;
+      }
+
+      /* Show the tooltip text on hover */
+      .info-icon:hover .tooltip-text {
+        display: block;
+      }
+
+      .main-submit-button {
+        background-color: #3f9a42;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition-duration: 0.4s;
+      }
+
+      
+
+      .help-message {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    width: 350px;
+    transition: opacity 0.2s, visibility 0.2s;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+  
+    
+#results {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #fafafa;
+    position: relative;
+}
+
+.result-item:last-child {
+    margin-bottom: 0;
+}
+
+.result-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.result-content {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.result-footer {
+    color: #777;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;  /* Increased padding */
+    background-color: #2d6a4f;  /* Adjusted color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Added shadow for depth */
+    color: #fff;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2em;  /* Increased font size */
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.info-icon {
+    background-color: #f6faf6;
+    color: #3f9a42;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.info-icon:hover {
+    background-color: #388e3c;  /* Hover effect color */
+}
+
+.info-icon:hover .help-message {
+    visibility: visible;
+    opacity: 1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(to right, #1e3c72, #2a5298);  /* Dark gradient background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Subtle shadow for depth */
+    color: #fff;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5em;  /* Larger font size */
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    font-family: 'Georgia', serif;  /* More elegant font */
+}
+
+.info-icon {
+    background-color: #3f9a42;  
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    position: relative;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Subtle shadow for depth */
+}
+
+.info-icon:hover {
+    background-color: #2d6a4f; 
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, #2a5d98, #4f83cc);  /* Vibrant gradient background */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    position: relative;  /* For adding pseudo elements */
+    color: #fff;
+    overflow: hidden;  /* Hide overflow for pseudo elements */
+}
+
+.header:before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+    transform: rotate(45deg);
+    pointer-events: none;  /* Do not interfere with interactions */
+}
+
+.header:after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: -75px;
+    right: -75px;
+    transform: rotate(135deg);
+    pointer-events: none;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    font-family: 'Georgia', serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);  /* Subtle text-shadow for depth */
+}
+
+.info-icon {
+    background-color: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    position: relative;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.info-icon:hover {
+    background-color: #2a5d98;
+    transform: scale(1.1);  /* Slight growth effect on hover */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, #2a5d98, #4f83cc);  /* Vibrant gradient background */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    position: relative;  /* For adding pseudo elements */
+    color: #fff;
+    overflow: hidden;  /* Hide overflow for pseudo elements */
+}
+
+.header:before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+    transform: rotate(45deg);
+    pointer-events: none;  /* Do not interfere with interactions */
+}
+
+.header:after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: -75px;
+    right: -75px;
+    transform: rotate(135deg);
+    pointer-events: none;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    font-family: 'Georgia', serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);  /* Subtle text-shadow for depth */
+}
+
+.info-icon {
+    background-color: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    position: relative;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.info-icon:hover {
+    background-color: #2a5d98;
+    transform: scale(1.1);  /* Slight growth effect on hover */
+}
+
+.info-icon {
+    position: relative;
+}
+
+.new-tooltip-text {
+    display: none;
+    display: none;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    z-index: 10;
+    margin-right: 10px;
+}
+
+.info-icon:hover .new-tooltip-text {
+    display: none;
+    display: block;
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>SignalSurf</h1>
+<span class="info-icon">?
+        
+<div class_="new-tooltip-text">
+</div></span>
+</div>
+<form enctype="multipart/form-data" id="sequence-form" method="post">
+<input checked="" id="sequence_radio" name="input_type" type="radio" value="sequence"/>
+<label for="sequence">Sequence</label><br/>
+<input id="uniprot" name="input_type" type="radio" value="uniprot"/>
+<label for="uniprot">Uniprot Entry</label><br/>
+<input id="toggleTextboxes" name="input_type" onchange="toggleNewTextboxes()" type="radio" value="nhc"/>
+<label for="toggleTextboxes">N/H/C</label><br/>
+<div id="originalTextboxContainer">
+<label for="sequence" id="sequenceLabel">Enter Sequence or Uniprot Entry:</label><br/>
+<textarea cols="50" id="sequence" name="sequence" rows="8"></textarea><br/>
+</div>
+<div id="newTextboxesContainer" style="display:none;">
+<label for="sequence1">N:</label>
+<textarea cols="50" id="sequence1" name="sequence1" rows="3"></textarea><br/>
+<label for="sequence2">H:</label>
+<textarea cols="50" id="sequence2" name="sequence2" rows="3"></textarea><br/>
+<label for="sequence3">C:</label>
+<textarea cols="50" id="sequence3" name="sequence3" rows="3"></textarea><br/>
+</div>
+<div id="uniprot-options" style="display: none;">
+<label for="option">Select Organism:</label>
+<select id="option" name="option">
+<option value="option1">Homo sapiens</option>
+<option value="option2">Escherichia coli</option>
+<option value="option3">Arabidopsis thaliana </option>
+<option value="option4">S.cerevisiae</option>
+</select>
+</div>
+<div id="uniprot-options2" style="display: none;">
+<label for="option2">Select Region:</label>
+<select id="option2" name="option2">
+<option value="option1">N-region</option>
+<option value="option2">H-region</option>
+<option value="option3">C-region</option>
+<option value="option4">SP-region</option>
+</select>
+</div>
+<div id="uniprot-options3" style="display: none;">
+<label for="option3">Select Feature</label>
+<select id="option3" name="option3">
+<option value="option1">Zimmerman Polarity</option>
+<option value="option2">Avg. Hydrophobicity KD</option>
+<option value="option3">Net charge </option>
+</select>
+</div>
+<input onclick="pasteExampleSequence()" type="button" value="Paste Example Sequence"/><br/>
+<input disabled="true" onclick="pasteExampleList()" type="button" value="Paste Example list"/><br/>
+     
+      fasta file<input name="file" type="file" value="fasta_file"/><br/>
+      
+
+      n/h/c file<input name="file_nhc" type="file" value="file_nhc"/>
+<input class="main-submit-button" type="submit" value="Submit"/>
+</form>
+<form action="/signalsurf/download_csv" enctype="multipart/form-data" method="get">
+<input disabled="" name="download_csv" type="submit" value="Download CSV"/>
+</form>
+<div id="loading-wheel"></div>
+<div id="loading-message" style="display: none;">Your job is being processed...</div>
+
+    
+
+    
+   
+    <div id="results">
+      
+
+    </div>
+<script>
+      
+      
+      
+      document.getElementById("uniprot").addEventListener("change", function(event) {
+        if (event.target.checked) {
+          document.getElementById("uniprot-options").style.display = "block";
+          document.getElementById("uniprot-options2").style.display = "block";
+          document.getElementById("uniprot-options3").style.display = "block";
+          toggleOriginalTextbox();
+        }
+      });
+
+      document.getElementById("sequence_radio").addEventListener("change", function(event) {
+        if (event.target.checked) {
+          document.getElementById("uniprot-options").style.display = "none";
+          document.getElementById("uniprot-options2").style.display = "none";
+          document.getElementById("uniprot-options3").style.display = "none";
+          toggleOriginalTextbox();
+        }
+      });
+
+      document.getElementById("toggleTextboxes").addEventListener("change", function(event) {
+        if (event.target.checked) {
+          document.getElementById("uniprot-options").style.display = "block";
+          document.getElementById("uniprot-options2").style.display = "block";
+          document.getElementById("uniprot-options3").style.display = "block";
+        }
+      });
+
+
+      document.getElementById("sequence-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        showLoadingWheel();
+
+        // Create a FormData object to send the form data as a multipart request
+        var formData = new FormData(event.target);
+
+        // Send the request via AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST","/signalsurf/", true);
+        
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // Display the results when the request is completed
+            var parser = new DOMParser();
+            var responseDoc = parser.parseFromString(xhr.responseText, "text/html");
+            var resultsElement = responseDoc.getElementById("results");
+            document.getElementById("results").innerHTML = resultsElement.innerHTML;
+
+            // Check if the N/H/C checkbox is selected
+            if (!document.getElementById('toggleTextboxes').checked) {
+              enableDownloadButton();
+            }
+
+            hideLoadingWheel();
+          }
+        };
+        xhr.send(formData);
+      });
+
+      function toggleOriginalTextbox() {
+        const originalTextboxContainer = document.getElementById('originalTextboxContainer');
+        const newTextboxesContainer = document.getElementById('newTextboxesContainer');
+        
+        originalTextboxContainer.style.display = 'block';
+        newTextboxesContainer.style.display = 'none';
+        document.getElementById('toggleTextboxes').checked = false;
+      }
+
+
+      function toggleNewTextboxes() {
+        const isChecked = document.getElementById('toggleTextboxes').checked;
+        const originalTextboxContainer = document.getElementById('originalTextboxContainer');
+        const newTextboxesContainer = document.getElementById('newTextboxesContainer');
+
+        if (isChecked) {
+            originalTextboxContainer.style.display = 'none';
+            newTextboxesContainer.style.display = 'block';
+        } else {
+            originalTextboxContainer.style.display = 'block';
+            newTextboxesContainer.style.display = 'none';
+        }
+     }
+
+
+
+
+      function hideLoadingWheel() {
+        document.getElementById('loading-wheel').style.display = 'none';
+        document.getElementById('loading-message').style.display = 'none';
+      }
+
+      function enableDownloadButton() {
+        document.getElementsByName('download_csv')[0].removeAttribute('disabled');
+      }
+
+      function pasteExampleSequence() {
+        var exampleSequence = "MTPPRLFWVWLLVAGTQGVNDGDMRLADGGATNQGRVEIFYRGQWGTVCDNLWDLTDASVVCRALGFENATQALGRAAFGQGSGPIMLDEVQCTGTEASLADCKSLGWLKSNCRHERDAGVVCTNETRSTHTLDLSRELSEALGQIFDSQRGCDLSISVNVQGEDALGFCGHTVILTANLEAQALWKEPGSNVTMSVDAECVPMVRDLLRYFYSRRIDITLSSVKCFHKLASAYGARQLQGYCASLFAILLPQDPSFQMPLDLYAYAVATGDALLEKLCLQFLAWNFEALTQAEAWPSVPTDLLQLLLPRSDLAVPSELALLKAVDTWSWGERASHEEVEGLVEKIRFPMMLPEELFELQFNLSLYWSHEALFQKKTLQALEFHTVPFQLLARYKGLNLTEDTYKPRIYTSPTWSAFVTDSSWSARKSQLVYQSRRGPLVKYSSDYFQAPSDYRYYPYQSFQTPQHPSFLFQDKRVSWSLVYLPTIQSCWNYGFSCSSDELPVLGLTKSGGSDRTIAYENKALMLCEGLFVADVTDFEGWKAAIPSALDTNSSKSTSSFPCPAGHFNGFRTVIRPFYLTNSSGVD"; // Replace with your example sequence
+        document.getElementById("sequence").value = exampleSequence;
+      }
+
+      function pasteExampleList() {
+        var exampleList = "P51571, P43308, Q9UM22, P43307, Q9H6X2,Q8IWB1, O00622, Q99519, P54802, Q9GZX9, Q8N129, Q13454, Q9Y3A6, Q9H0U3, Q13214, Q9BRR6, P41221, P02751, Q9UMX5, Q5VW38-2, O14773, Q5T9L3, P15941, Q15582, O75629, Q9ULF5, Q08380, P08069, P08572, Q8N2U0, Q9UBV2, Q969V3, O14672, O14672, P06756, Q12907, P39656, Q5JPE7, P08236, P00533"; // Replace with your example sequence
+        document.getElementById("sequence").value = exampleList;
+      }
+
+      async function fetchJobId() {
+        try {
+            const response = await fetch("/signalsurf/generate_job_id");
+            if (!response.ok) { // check if HTTP response status is 200-299
+                throw new Error(`HTTP error! status: ${response.status}`);
+            } else {
+                const data = await response.text(); // or .text() if the response is not JSON
+                return data;
+            }
+        } catch (error) {
+            console.log(error); // or handle error differently
+        }
+      }
+
+
+      async function showLoadingWheel() {
+        var jobId = await fetchJobId();
+        document.getElementById('loading-wheel').style.display = 'block';
+        document.getElementById('loading-message').innerText = 'Your job ' + jobId + ' is being processed...';
+        document.getElementById('loading-message').style.display = 'block';
+      }
+
+
+
+    
+      
+    
+    
+document.querySelector('input[name="input_type"][value="sequence"]').addEventListener('change', function(e) {
+    document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = !e.target.checked;
+});
+document.querySelector('input[name="input_type"][value="uniprot"]').addEventListener('change', function(e) {
+    document.querySelector('input[type="button"][value="Paste Example list"]').disabled = !e.target.checked;
+});
+
+document.querySelector('input[name="input_type"][value="sequence"]').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = false;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = true;
+    } else {
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = true;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = false;
+    }
+});
+document.querySelector('input[name="input_type"][value="uniprot"]').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = true;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = false;
+    } else {
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = false;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = true;
+    }
+});
+
+document.querySelector('input[name="input_type"][value="nhc"]').addEventListener('change', function(e) {
+    if (e.target.checked) {
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = true;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = true;
+    } else {
+        // Restore the states of the buttons based on the Sequence and UniProt checkboxes
+        var sequenceChecked = document.querySelector('input[name="input_type"][value="sequence"]').checked;
+        var uniprotChecked = document.querySelector('input[name="input_type"][value="uniprot"]').checked;
+        
+        document.querySelector('input[type="button"][value="Paste Example Sequence"]').disabled = !sequenceChecked || uniprotChecked;
+        document.querySelector('input[type="button"][value="Paste Example list"]').disabled = !uniprotChecked || sequenceChecked;
+    }
+});
+
+document.querySelector('input[type="submit"][value="Submit"]').addEventListener('click', function() {
+    document.querySelector('#results').innerHTML = '';
+});
+
+function positionTooltip() {
+    const tooltip = document.getElementById('tooltip');
+    const icon = document.querySelector('.info-icon');
+    const iconRect = icon.getBoundingClientRect();
+    
+    // Check if there's enough space to the left of the icon
+    if (iconRect.left > tooltip.offsetWidth) {
+        tooltip.style.left = 'auto';
+        tooltip.style.right = '100%';
+        tooltip.style.top = '50%';
+        tooltip.style.transform = 'translateY(-50%)';
+    } else {
+        // Display the tooltip above the icon if not enough space to the left
+        tooltip.style.right = '50%';
+        tooltip.style.transform = 'translateX(50%)';
+        tooltip.style.bottom = '100%';
+        tooltip.style.top = 'auto';
+    }
+}
+
+document.querySelector('.info-icon').addEventListener('mouseover', positionTooltip);
+
+</script>
+</body>
+</html>

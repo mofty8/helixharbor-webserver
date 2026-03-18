@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>HelixHarbor</title>
+  <style>
+    :root {
+      --bg-0: #f4f7f0;
+      --bg-1: #ffffff;
+      --ink-0: #0f172a;
+      --ink-1: #334155;
+      --brand-0: #0e7490;
+      --brand-1: #0f766e;
+      --brand-2: #1d4ed8;
+      --danger: #b91c1c;
+      --border: #dbe3ec;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      color: var(--ink-0);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(14, 116, 144, 0.15), transparent 35%),
+        radial-gradient(circle at 90% 6%, rgba(29, 78, 216, 0.13), transparent 40%),
+        linear-gradient(180deg, #f8fafc 0%, var(--bg-0) 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(1200px, 94vw);
+      margin: 24px auto 40px;
+    }
+
+    .header {
+      background: linear-gradient(120deg, var(--brand-0), var(--brand-2));
+      border-radius: var(--radius);
+      color: white;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      right: -70px;
+      top: -90px;
+    }
+
+    .header h1 {
+      margin: 0 0 4px;
+      font-size: 2rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .manual-btn {
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+
+    .header p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+      position: relative;
+      z-index: 1;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.12rem;
+      color: var(--ink-0);
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(200px, 1fr));
+      gap: 8px 12px;
+      margin-bottom: 14px;
+    }
+
+    .mode-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--ink-1);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    label {
+      font-size: 0.92rem;
+      color: var(--ink-1);
+    }
+
+    textarea,
+    select,
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: var(--ink-0);
+      background: #fff;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    button,
+    input[type="button"],
+    input[type="submit"] {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.16s ease, opacity 0.2s ease;
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    button:hover,
+    input[type="button"]:hover,
+    input[type="submit"]:hover {
+      transform: translateY(-1px);
+    }
+
+    .main-submit-button {
+      background: linear-gradient(120deg, var(--brand-1), var(--brand-2));
+      color: white;
+      font-weight: 600;
+      min-width: 120px;
+    }
+
+    .main-clear-button {
+      background: #ef4444;
+      color: white;
+    }
+
+    .download-stack form,
+    .download-stack .inline-control {
+      margin-bottom: 10px;
+    }
+
+    .download-stack input[type="submit"],
+    .download-stack button {
+      width: 100%;
+      text-align: left;
+    }
+
+    #loading-message {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--ink-1);
+    }
+
+    #loading-wheel {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid var(--brand-2);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-top: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #results {
+      margin-top: 18px;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    #results h2 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+    }
+
+    #error-message {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+
+    .scrollable-container {
+      overflow: auto;
+      max-height: 430px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .myDataFrame {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    .myDataFrame th,
+    .myDataFrame td {
+      border: 1px solid #e2e8f0;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .myDataFrame th {
+      background: #f1f5f9;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    #results img {
+      width: 100%;
+      max-width: 980px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 8px auto 0;
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    #proteinIdSection {
+      margin-top: 14px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    #proteinIdsResult p {
+      background: #ecfeff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 8px;
+      margin: 8px 0 0;
+      font-size: 0.88rem;
+      word-break: break-word;
+    }
+
+    .manual-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .manual-modal.open {
+      display: flex;
+    }
+
+    .manual-card {
+      width: min(1000px, 96vw);
+      max-height: 86vh;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.24);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .manual-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: #f8fafc;
+    }
+
+    .manual-close {
+      background: #e2e8f0;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .manual-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px 0;
+    }
+
+    .manual-tab {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .manual-tab.active {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1e3a8a;
+      font-weight: 600;
+    }
+
+    .manual-body {
+      padding: 14px;
+      overflow: auto;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    .manual-pane {
+      display: none;
+    }
+
+    .manual-pane.active {
+      display: block;
+    }
+
+    .manual-body h3 {
+      margin-top: 0;
+      color: #0f172a;
+    }
+
+    .manual-body ol,
+    .manual-body ul {
+      padding-left: 20px;
+    }
+
+    .manual-code {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82rem;
+    }
+
+    .manual-pdf {
+      width: 100%;
+      min-height: 60vh;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .site-footer {
+      margin-top: 24px;
+      padding: 16px 20px 24px;
+      border-top: 1px solid #d7dee9;
+      text-align: center;
+      color: #4b5563;
+      font-size: 0.95rem;
+      background: #f8fafc;
+    }
+
+    .site-footer a {
+      color: #1f3f68;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="header">
+      <div class="header-top">
+        <h1>HelixHarbor</h1>
+        <button type="button" class="manual-btn" id="open-manual-btn">User Manual</button>
+      </div>
+    </div>
+
+    <div class="manual-modal" id="manual-modal">
+      <div class="manual-card">
+        <div class="manual-head">
+          <strong>HelixHarbor Manual</strong>
+          <button type="button" class="manual-close" id="close-manual-btn">Close</button>
+        </div>
+        <div class="manual-tabs">
+          <button type="button" class="manual-tab active" data-manual-tab="quick">Quick Guide</button>
+          <button type="button" class="manual-tab" data-manual-tab="docker">Docker Guide</button>
+        </div>
+        <div class="manual-body">
+          <div class="manual-pane active" data-manual-pane="quick">
+            <h3>Quick Guide</h3>
+            <p>HelixHarbor has 4 analysis modes. Choose one mode first, then fill the relevant inputs.</p>
+            <ul>
+              <li><strong>Sequence:</strong> Enter one amino-acid sequence. Output is region annotation (inside/outside/membrane) plus feature values per segment.</li>
+              <li><strong>List Against Background:</strong> Enter UniProt IDs for your list of interest, then choose organism/background/feature. Output is a distribution comparison against the selected background set.</li>
+              <li><strong>Compare 2 Lists:</strong> Enter two UniProt lists and compare them directly using the selected feature.</li>
+              <li><strong>TMH Position Specific AAC:</strong> Enter UniProt IDs and orientation preference to get position-wise amino acid composition heatmaps.</li>
+            </ul>
+            <ol>
+              <li>Choose mode and paste sequence/IDs.</li>
+              <li>For list-based modes, set TMH region preference (<code>First TMH</code> or <code>All TMHs</code>) and a feature.</li>
+              <li>Click <code>Submit</code> to generate plots/tables.</li>
+              <li>Use downloads on the right panel for outputs.</li>
+            </ol>
+            <p><strong>Downloads:</strong> Sequence table and raw plot points are available from the right panel after analyses.</p>
+            <p><strong>Raw plot export:</strong> includes <code>group, id, type, begin, end, value</code> for each plotted point.</p>
+            <p><strong>Contact:</strong> mohamed.elmofty2hu-berlin.de</p>
+          </div>
+
+          <div class="manual-pane" data-manual-pane="docker">
+            <h3>Docker Guide (Current)</h3>
+            <p><strong>Prerequisite:</strong> Docker Desktop or Docker Engine is installed and running.</p>
+            <ol>
+              <li>Pull image:</li>
+            </ol>
+            <div class="manual-code">docker pull mmofty/helixharbor:latest</div>
+            <ol start="2">
+              <li>Run container:</li>
+            </ol>
+            <div class="manual-code">docker run --restart=always -d --name helixharbor -p 5005:5005 mmofty/helixharbor:latest</div>
+            <ul>
+              <li><code>--restart=always</code>: restart container automatically</li>
+              <li><code>-d</code>: detached mode</li>
+              <li><code>--name helixharbor</code>: fixed container name for easier management</li>
+              <li><code>-p 5005:5005</code>: map host/container ports</li>
+            </ul>
+            <ol start="3">
+              <li>Verify:</li>
+            </ol>
+            <div class="manual-code">docker ps</div>
+            <ol start="4">
+              <li>Open app:</li>
+            </ol>
+            <div class="manual-code">http://localhost:5005/HelixHarbor</div>
+            <p>If port <code>5005</code> is occupied, run with a different host port:</p>
+            <div class="manual-code">docker run --restart=always -d --name helixharbor -p 5006:5005 mmofty/helixharbor:latest</div>
+            <p>Update existing deployment:</p>
+            <div class="manual-code">docker pull mmofty/helixharbor:latest
+docker stop helixharbor
+docker rm helixharbor
+docker run --restart=always -d --name helixharbor -p 5005:5005 mmofty/helixharbor:latest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <h2>Analysis Setup</h2>
+        <form enctype="multipart/form-data" id="sequence-form" method="post">
+          <div class="mode-grid">
+            <label class="mode-item"><input checked id="sequence_radio" name="input_type" type="radio" value="sequence" />Sequence</label>
+            <label class="mode-item"><input id="uniprot" name="input_type" type="radio" value="uniprot" />List Against Background</label>
+            <label class="mode-item"><input id="setcmp" name="input_type" type="radio" value="setcmp" />Compare 2 Lists</label>
+            <label class="mode-item"><input id="ps_aac" name="input_type" type="radio" value="ps_aac" />TMH Position Specific AAC</label>
+          </div>
+
+          <div id="originalTextboxContainer">
+            <label for="sequence" id="sequenceLabel">Enter Sequence or Uniprot Entry</label>
+            <textarea id="sequence" name="sequence" rows="8"></textarea>
+          </div>
+
+          <div id="list1" style="display: none;">
+            <label for="list_1">Enter your first list</label>
+            <textarea id="list_1" name="list_1" rows="8"></textarea>
+          </div>
+
+          <div id="list2" style="display: none;">
+            <label for="list_2">Enter your second list</label>
+            <textarea id="list_2" name="list_2" rows="8"></textarea>
+          </div>
+
+          <div id="uniprot-options-organism" style="display: none;">
+            <label for="option4">Select Organism</label>
+            <select id="option4" name="option4">
+              <option value="option1">Homo sapiens</option>
+              <option value="option2">S.Cerevisiae</option>
+            </select>
+          </div>
+
+          <div id="uniprot-options" style="display: none;">
+            <label for="option">Select Background Set</label>
+            <select id="option" name="option">
+              <option value="option1">Uniprot</option>
+              <option value="option2">TopDB</option>
+              <option value="option3">TmAlpha</option>
+            </select>
+          </div>
+
+          <div id="uniprot-options2" style="display: none;">
+            <label for="option2">TMH Comparison Preference</label>
+            <select id="option2" name="option2">
+              <option value="option1">First TMH</option>
+              <option value="option2">All TMHs</option>
+            </select>
+          </div>
+
+          <div id="uniprot-options3" style="display: none;">
+            <label for="option3">Select Feature</label>
+            <select id="option3" name="option3">
+              <option value="option1">Volume</option>
+              <option value="option2">Surface Area</option>
+              <option value="option3">Bulkiness</option>
+              <option value="option4">Hydrophobicity</option>
+              <option value="option6">Amino Acid Composition Against Background</option>
+              <option value="option7">Custom Scale</option>
+            </select>
+          </div>
+
+          <div id="orientation_option" style="display: none;">
+            <label for="orientation">Orientation Preference</label>
+            <select id="orientation" name="orientation">
+              <option value="inside">Inside</option>
+              <option value="outside">Outside</option>
+            </select>
+          </div>
+
+          <label for="file">Upload fasta file (optional)</label>
+          <input name="file" type="file" value="fasta_file" />
+
+          <div class="btn-row">
+            <input onclick="pasteExampleSequence()" type="button" value="Paste Example Sequence" id="paste-sequence" />
+            <input disabled onclick="pasteExampleList()" type="button" value="Paste Example List" id="paste-list" />
+            <input class="main-submit-button" type="submit" value="Submit" />
+            <input class="main-clear-button" onclick="clear_page()" type="button" value="Clear" />
+          </div>
+        </form>
+      </div>
+
+      <div class="panel download-stack">
+        <h2>Downloads & Tools</h2>
+
+        <div id="customScaleOptions" style="display: none;">
+          <button id="downloadCustomScaleBtn" data-url="{{ url_for('main.download_custom_sheet') }}" onclick="downloadCustomScale()">Download Custom Scale Sheet</button>
+          <button id="uploadCustomScaleBtn" data-upload-url="{{ url_for('main.upload_custom_sheet') }}" onclick="triggerFileUpload()">Upload Custom Scale Sheet</button>
+          <input type="file" id="fileInput" style="display: none;" />
+        </div>
+
+        <form action="{{ url_for('main.download_csv') }}" enctype="multipart/form-data" method="get">
+          <input disabled name="download_csv" type="submit" value="Download Sequence Table" />
+        </form>
+
+        <form action="{{ url_for('main.download_plot_raw_data') }}" enctype="multipart/form-data" method="get">
+          <input disabled name="download_plot_raw_data" type="submit" value="Download Plot Raw Data" />
+        </form>
+
+        <div class="inline-control">
+          <label for="organism-select">Background Dataset Download</label>
+          <select id="organism-select" name="organism">
+            <option value="">--Please choose an option--</option>
+            <option value="option1">Homo sapiens</option>
+            <option value="option2">Escherichia coli</option>
+          </select>
+          <button id="download-background-btn" disabled>Download Background Set</button>
+          <div id="loading-wheel"></div>
+          <div id="loading-message" style="display: none;">Your job is being processed...</div>
+        </div>
+      </div>
+    </div>
+
+    {% if error_message %}
+    <div id="error-message">{{ error_message }}</div>
+    {% endif %}
+
+    <div id="results">
+      {% if results %}
+      <h2>Results</h2>
+
+      {% if results.Error %}
+      <div id="error-message">{{ results.Error }}</div>
+      {% endif%}
+
+      {% if results.sequence %}
+      <div class="scrollable-container">{{ results.sequence|safe }}</div>
+      {% endif %}
+
+      {% if results.plot_hydrophobicity %}
+      {% if results.non_transmembrane %}
+      <h2>Non-Transmembrane Proteins</h2>
+      <p>{{ results.non_transmembrane | join(', ') }}</p>
+      {% endif %}
+      <h2>Plot</h2>
+      <img src="data:image/png;base64,{{ results.plot_hydrophobicity }}" />
+      {% endif %}
+
+      {% if results.plot_GP %}
+      <h2>Plot</h2>
+      <img src="data:image/png;base64,{{ results.plot_GP }}" />
+      {% endif %}
+
+      {% if results.plot_polarity %}
+      <h2>Plot</h2>
+      <img src="data:image/png;base64,{{ results.plot_polarity }}" />
+      {% endif %}
+      {% endif %}
+    </div>
+
+    <div id="proteinIdSection" style="display:none;">
+      <label for="textField1">Upper Range</label>
+      <input type="text" id="textField1" placeholder="Enter Upper Range" />
+
+      <label for="textField2">Lower Range</label>
+      <input type="text" id="textField2" placeholder="Enter Lower Range" />
+
+      <button id="showProteinIds">Show Protein IDs</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("sequence-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      showLoadingWheel();
+      var formData = new FormData(event.target);
+      var sequenceRadio = document.getElementById("sequence_radio");
+      var uniprotRadio = document.getElementById("uniprot");
+      var selected_feature = document.getElementById("option3");
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "{{ url_for('main.index') }}", true);
+
+      var timeout = setTimeout(function() {
+        xhr.abort();
+        alert("Request timed out. Please try again.");
+        hideLoadingWheel();
+      }, 18000000);
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4){
+          clearTimeout(timeout);
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var parser = new DOMParser();
+            var responseDoc = parser.parseFromString(xhr.responseText, "text/html");
+            var resultsElement = responseDoc.getElementById("results");
+
+            document.getElementById("results").innerHTML = resultsElement.innerHTML;
+            hideLoadingWheel();
+            document.getElementById("proteinIdSection").style.display = "block";
+            window.scrollTo(0, document.body.scrollHeight);
+
+            if (sequenceRadio.checked) {
+              enableDownloadButton();
+            }
+
+            if (uniprotRadio.checked) {
+              if (selected_feature.value === "option6") {
+                enableAACbutton();
+              }
+            }
+
+            if (resultsElement.querySelector("img")) {
+              enablePlotDataButton();
+            } else {
+              disablePlotDataButton();
+            }
+          }
+        }
+      };
+      xhr.send(formData);
+    });
+
+    document.getElementById("showProteinIds").addEventListener("click", function() {
+      var upperRange = document.getElementById("textField1").value;
+      var lowerRange = document.getElementById("textField2").value;
+      var selectedFeature = document.getElementById("option3").value;
+      var selectedMethod = document.querySelector('input[name="input_type"]:checked').value;
+
+      var formData = new FormData();
+      formData.append("upper_range", upperRange);
+      formData.append("lower_range", lowerRange);
+      formData.append("selected_feature", selectedFeature);
+      formData.append("selected_method", selectedMethod);
+
+      fetch("{{ url_for('main.lower_upper_range') }}", {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        var resultsContainer = document.getElementById("proteinIdsResult");
+        if (!resultsContainer) {
+          resultsContainer = document.createElement("div");
+          resultsContainer.id = "proteinIdsResult";
+          document.getElementById("proteinIdSection").appendChild(resultsContainer);
+        }
+        resultsContainer.innerHTML = '';
+
+        if (selectedMethod === "uniprot") {
+          var para = document.createElement("p");
+          para.textContent = (data.unique_ids || []).join(", ");
+          resultsContainer.appendChild(para);
+        } else if (selectedMethod === "setcmp") {
+          var list1Para = document.createElement("p");
+          list1Para.textContent = "List 1 IDs: " + (data.unique_ids_1 || []).join(", ");
+          resultsContainer.appendChild(list1Para);
+
+          var list2Para = document.createElement("p");
+          list2Para.textContent = "List 2 IDs: " + (data.unique_ids_2 || []).join(", ");
+          resultsContainer.appendChild(list2Para);
+        }
+
+        window.scrollTo(0, document.body.scrollHeight);
+      })
+      .catch(error => console.error('Error fetching protein IDs:', error));
+    });
+
+    function triggerFileUpload() {
+      document.getElementById('fileInput').click();
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function () {
+      uploadCustomScale(this.files[0]);
+    });
+
+    function uploadCustomScale(file) {
+      if (!file) return;
+      var uploadUrl = document.getElementById('uploadCustomScaleBtn').dataset.uploadUrl;
+      var formData = new FormData();
+      formData.append("file", file);
+
+      fetch(uploadUrl, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      function updateButtonStates() {
+        var sequenceSelected = document.querySelector('input[name="input_type"][value="sequence"]').checked;
+        var uniprotSelected = document.querySelector('input[name="input_type"][value="uniprot"]').checked;
+        var setcmpSelected = document.querySelector('input[name="input_type"][value="setcmp"]').checked;
+        var ps_aacSelected = document.querySelector('input[name="input_type"][value="ps_aac"]').checked;
+
+        document.getElementById('paste-sequence').disabled = !sequenceSelected;
+        document.getElementById('paste-list').disabled = !(uniprotSelected || setcmpSelected || ps_aacSelected);
+      }
+
+      document.querySelector('input[name="input_type"][value="sequence"]').addEventListener('change', updateButtonStates);
+      document.querySelector('input[name="input_type"][value="uniprot"]').addEventListener('change', updateButtonStates);
+      document.querySelector('input[name="input_type"][value="setcmp"]').addEventListener('change', updateButtonStates);
+      document.querySelector('input[name="input_type"][value="ps_aac"]').addEventListener('change', updateButtonStates);
+      updateButtonStates();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var customScaleSelect = document.getElementById('option3');
+      var customScaleOptionsDiv = document.getElementById('customScaleOptions');
+
+      customScaleSelect.addEventListener('change', function () {
+        customScaleOptionsDiv.style.display = this.value === 'option7' ? 'block' : 'none';
+      });
+
+      customScaleSelect.dispatchEvent(new Event('change'));
+    });
+
+    document.getElementById("setcmp").addEventListener("change", function (event) {
+      if (event.target.checked) {
+        document.getElementById("list1").style.display = "block";
+        document.getElementById("list2").style.display = "block";
+        document.getElementById("originalTextboxContainer").style.display = "none";
+      }
+    });
+
+    document.getElementById("uniprot").addEventListener("change", toggleSingleTextbox);
+    document.getElementById("sequence_radio").addEventListener("change", toggleSingleTextbox);
+    document.getElementById("ps_aac").addEventListener("change", toggleSingleTextbox);
+
+    function toggleSingleTextbox() {
+      document.getElementById("list1").style.display = "none";
+      document.getElementById("list2").style.display = "none";
+      document.getElementById("originalTextboxContainer").style.display = "block";
+    }
+
+    function toggleOriginalTextbox() {
+      toggleSingleTextbox();
+    }
+
+    document.getElementById("setcmp").addEventListener("change", function (event) {
+      if (event.target.checked) {
+        document.getElementById("uniprot-options").style.display = "none";
+        document.getElementById("uniprot-options2").style.display = "block";
+        document.getElementById("uniprot-options3").style.display = "block";
+        document.getElementById("uniprot-options-organism").style.display = "none";
+        document.getElementById('orientation_option').style.display = 'none';
+        document.getElementById("list1").style.display = "block";
+        document.getElementById("list2").style.display = "block";
+        document.getElementById("originalTextboxContainer").style.display = "none";
+      }
+    });
+
+    document.getElementById("uniprot").addEventListener("change", function (event) {
+      if (event.target.checked) {
+        document.getElementById("uniprot-options").style.display = "block";
+        document.getElementById("uniprot-options2").style.display = "block";
+        document.getElementById("uniprot-options3").style.display = "block";
+        document.getElementById("uniprot-options-organism").style.display = "block";
+        document.getElementById('orientation_option').style.display = 'none';
+        toggleOriginalTextbox();
+      }
+    });
+
+    document.getElementById("sequence_radio").addEventListener("change", function (event) {
+      if (event.target.checked) {
+        document.getElementById("uniprot-options").style.display = "none";
+        document.getElementById("uniprot-options2").style.display = "none";
+        document.getElementById("uniprot-options3").style.display = "none";
+        document.getElementById("uniprot-options-organism").style.display = "none";
+        document.getElementById('orientation_option').style.display = 'none';
+        toggleOriginalTextbox();
+      }
+    });
+
+    document.getElementById("ps_aac").addEventListener("change", function (event) {
+      if (event.target.checked) {
+        document.getElementById("uniprot-options").style.display = "none";
+        document.getElementById("uniprot-options2").style.display = "none";
+        document.getElementById("uniprot-options3").style.display = "none";
+        document.getElementById("uniprot-options-organism").style.display = "none";
+        document.getElementById('orientation_option').style.display = 'block';
+        toggleOriginalTextbox();
+      }
+    });
+
+    function downloadCustomScale() {
+      var downloadUrl = document.getElementById('downloadCustomScaleBtn').dataset.url;
+      window.location.href = downloadUrl;
+    }
+
+    function hideLoadingWheel() {
+      document.getElementById('loading-wheel').style.display = 'none';
+      document.getElementById('loading-message').style.display = 'none';
+    }
+
+    function enableDownloadButton() {
+      document.getElementsByName('download_csv')[0].removeAttribute('disabled');
+    }
+
+    function enableAACbutton() {
+      var aacBtn = document.getElementsByName('download_aac')[0];
+      if (aacBtn) {
+        aacBtn.removeAttribute('disabled');
+      }
+    }
+
+    function enablePlotDataButton() {
+      document.getElementsByName('download_plot_raw_data')[0].removeAttribute('disabled');
+    }
+
+    function disablePlotDataButton() {
+      document.getElementsByName('download_plot_raw_data')[0].setAttribute('disabled', true);
+    }
+
+    function clear_page() {
+      window.location.reload();
+    }
+
+    function pasteExampleSequence() {
+      var exampleSequence = "MTAWILLPVSLSAFSITGIWTVYAMAVMNHHVCPVENWSYNESCPPDPAEQGGPKTCCTLDDVPLISKCGSYPPESCLFSLIGNMGAFMVALICLLRYGQLLEQSRHSWVNTTALITGCTNAAGLLVVGNFQVDHARSLHYVGAGVAFPAGLLFVCLHCALSYQGATAPLDLAVAYLRSVLAVIAFITLVLSGVFFVHESSQLQHGAALCEWVCVIDILIFYGTFSYEFGAVSSDTLVAALQPTPGRACKSSGSSSTSTHLNCAPESIAMI";
+      document.getElementById("sequence").value = exampleSequence;
+    }
+
+    function pasteExampleList() {
+      var exampleList = "P26992, Q9H300, Q15256, P24390, Q8NH09, Q00325, Q9UHF4, Q99965, Q8TB68, Q9H841, Q5T8D3, O60894, Q19T08, O43916, Q8IUH4, P11362, Q8IZF0, Q96GR4, Q9NWH2";
+      document.getElementById("sequence").value = exampleList;
+    }
+
+    async function fetchJobId() {
+      try {
+        const response = await fetch("{{ url_for('main.generate_job_id') }}");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.text();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function showLoadingWheel() {
+      var jobId = await fetchJobId();
+      document.getElementById('loading-wheel').style.display = 'block';
+      document.getElementById('loading-message').innerText = 'Your job ' + jobId + ' is being processed...';
+      document.getElementById('loading-message').style.display = 'block';
+    }
+
+    document.querySelector('input[type="submit"][value="Submit"]').addEventListener('click', function () {
+      document.querySelector('#results').innerHTML = '';
+    });
+
+    var selectElement = document.getElementById('organism-select');
+    var button = document.getElementById('download-background-btn');
+
+    selectElement.addEventListener('change', function () {
+      button.disabled = !this.value;
+    });
+
+    function handleDownloadBackground() {
+      var option = selectElement.value;
+      window.location.href = `/HelixHarbor/download_background?option=${option}`;
+    }
+
+    button.addEventListener('click', handleDownloadBackground);
+
+    var manualModal = document.getElementById('manual-modal');
+    var openManualBtn = document.getElementById('open-manual-btn');
+    var closeManualBtn = document.getElementById('close-manual-btn');
+    var manualTabs = document.querySelectorAll('[data-manual-tab]');
+    var manualPanes = document.querySelectorAll('[data-manual-pane]');
+
+    function activateManualTab(tabName) {
+      manualTabs.forEach(function(tab) {
+        tab.classList.toggle('active', tab.getAttribute('data-manual-tab') === tabName);
+      });
+      manualPanes.forEach(function(pane) {
+        pane.classList.toggle('active', pane.getAttribute('data-manual-pane') === tabName);
+      });
+    }
+
+    openManualBtn.addEventListener('click', function() {
+      manualModal.classList.add('open');
+      activateManualTab('quick');
+    });
+
+    closeManualBtn.addEventListener('click', function() {
+      manualModal.classList.remove('open');
+    });
+
+    manualModal.addEventListener('click', function(e) {
+      if (e.target === manualModal) {
+        manualModal.classList.remove('open');
+      }
+    });
+
+    manualTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        activateManualTab(tab.getAttribute('data-manual-tab'));
+      });
+    });
+  </script>
+  <footer class="site-footer">
+    <p>2024 Mohamed Elmofty Volkhard Helms</p>
+    <p>
+      <a href="https://www-cbi.cs.uni-saarland.de/" target="_blank" rel="noopener noreferrer">CHAIR OF COMPUTATIONAL BIOLOGY, SAARLAND UNIVERSITY</a>
+    </p>
+    <p>
+      <a href="https://www-cbi.cs.uni-saarland.de/formal/legal-notice-impressum/" target="_blank" rel="noopener noreferrer">LEGAL NOTICE</a>
+      &nbsp;|&nbsp;
+      <a href="https://www-cbi.cs.uni-saarland.de/formal/privacy-policy/" target="_blank" rel="noopener noreferrer">PRIVACY POLICY</a>
+    </p>
+  </footer>
+</body>
+</html>
